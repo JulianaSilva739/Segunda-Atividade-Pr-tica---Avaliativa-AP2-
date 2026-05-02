@@ -1,0 +1,62 @@
+class ImcPage extends StatefulWidget {
+  @override
+  _ImcPageState createState() => _ImcPageState();
+}
+
+class _ImcPageState extends State<ImcPage> {
+  double peso = 0;
+  double altura = 0;
+  double imc = 0;
+
+  void calcularIMC() {
+    setState(() {
+      imc = peso / (altura * altura);
+    });
+  }
+
+  String getClassificacao() {
+    if (imc < 18.5) return "Abaixo do peso";
+    if (imc < 25) return "Peso normal";
+    if (imc < 30) return "Sobrepeso";
+    return "Obesidade";
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("IMC Calculator")),
+      body: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            TextField(
+              decoration: InputDecoration(labelText: "Peso (kg)"),
+              keyboardType: TextInputType.number,
+              onChanged: (value) {
+                peso = double.tryParse(value) ?? 0;
+              },
+            ),
+            TextField(
+              decoration: InputDecoration(labelText: "Altura (m)"),
+              keyboardType: TextInputType.number,
+              onChanged: (value) {
+                altura = double.tryParse(value) ?? 0;
+              },
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: calcularIMC,
+              child: Text("Calcular IMC"),
+            ),
+            SizedBox(height: 20),
+            Text(
+              "IMC: ${imc.toStringAsFixed(1)}",
+              style: TextStyle(fontSize: 24),
+            ),
+            Text(getClassificacao()),
+          ],
+        ),
+      ),
+    );
+  }
+}
